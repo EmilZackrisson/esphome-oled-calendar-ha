@@ -1,0 +1,55 @@
+binary_sensor:
+  - platform: homeassistant
+    name: "OLED Power"
+    entity_id: input_boolean.oled_pa_av
+    on_press:
+      - lambda: id(oled).turn_on();
+    on_release:
+      - lambda: id(oled).turn_off();
+
+
+text_sensor:
+  - platform: homeassistant
+    name: "OLED Text 1"
+    entity_id: input_text.oled_text
+    id: oled_text1
+  
+  - platform: homeassistant
+    name: "OLED Text 2"
+    entity_id: input_text.oled_text_2
+    id: oled_text2
+    
+display:
+  - platform: ssd1306_i2c
+    model: "SSD1306 64x48"
+    reset_pin: D0
+    id: oled
+    rotation: 180°
+    address: 0x3C
+    lambda: |-
+      it.printf(32, 0, id(my_font), TextAlign::TOP_CENTER, id(oled_text1).state.c_str());
+      
+      it.strftime(32, 20, id(big_font), TextAlign::CENTER, "%H:%M", id(esptime).now());
+      
+      it.printf(32, 40, id(my_font), TextAlign::BOTTOM_CENTER, "%.1f°", id(inside_temperature).state);
+      
+      it.printf(32, 50, id(my_font), TextAlign::BOTTOM_CENTER, id(oled_text2).state.c_str());
+
+sensor:
+  - platform: homeassistant
+    id: inside_temperature
+    entity_id: sensor.temperatur
+    internal: true
+
+time:
+  - platform: homeassistant
+    id: esptime
+
+font:
+  - file: "OpenSans-Regular.ttf"
+    id: my_font
+    size: 10
+    
+  - file: "OpenSans-Regular.ttf"
+    id: big_font
+    size: 20
