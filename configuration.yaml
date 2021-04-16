@@ -1,0 +1,18 @@
+sensor:
+    - platform: template
+    sensors:
+      nuvarande_lektion:
+        friendly_name: "Nuvarande Lektion"
+        value_template: "{{ state_attr('calendar.skola', 'message') | string }}"
+
+  - platform: template
+    sensors:
+      lektionen_slutar:
+        friendly_name: "Lektionen Slutar"
+        value_template: "{{ as_timestamp(strptime(state_attr('calendar.skola', 'end_time'), '%Y-%m-%d %H:%M:%S')) | timestamp_custom('%H:%M') }} "
+
+  - platform: template
+    sensors:
+      nasta_lektion:
+        friendly_name: "Nästa Lektion"
+        value_template: "{{ as_timestamp(strptime(state_attr('calendar.skola', 'start_time'), '%Y-%m-%d %H:%M:%S')) | timestamp_custom('%a %H:%M') }}"
