@@ -1,0 +1,43 @@
+- id: '1618428965765'
+  alias: OLED Nästa lektion
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: calendar.skola
+    to: 'off'
+    for: 00:01:00
+    from: 'on'
+  condition: []
+  action:
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.oled_text
+    data:
+      value: '{{ states.sensor.nasta_lektion.state }}'
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.oled_text_2
+    data:
+      value: '{{ states.sensor.nuvarande_lektion.state }}'
+  mode: single
+- id: '1618429383488'
+  alias: OLED Nuvarande Lektion
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: calendar.skola
+    to: 'on'
+    from: 'off'
+  condition: []
+  action:
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.oled_text
+    data:
+      value: '{{ states.sensor.lektionen_slutar.state }}'
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.oled_text_2
+    data:
+      value: ' {{ states.sensor.nuvarande_lektion.state }} '
+  mode: single
