@@ -5,8 +5,12 @@
   - platform: state
     entity_id: calendar.skola
     to: 'off'
-    for: 00:01:00
     from: 'on'
+    for: 00:05:00
+  - platform: event
+    event_type: state_changed
+    event_data:
+      entity_id: sensor.nuvarande_lektion
   condition: []
   action:
   - service: input_text.set_value
